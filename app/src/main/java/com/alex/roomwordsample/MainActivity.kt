@@ -4,8 +4,13 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +31,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        var toolbar = findViewById<View>(R.id.my_toolbar) as Toolbar
+        setSupportActionBar(toolbar)
+
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
         val adapter = WordListAdapter()
         recyclerView.adapter = adapter
@@ -41,6 +49,9 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this@MainActivity, NewWordActivity::class.java)
             startActivityForResult(intent, newWordActivityRequestCode)
         }
+
+        supportActionBar?.hide()
+        supportActionBar?.show()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,6 +68,27 @@ class MainActivity : AppCompatActivity() {
                 R.string.empty_not_saved,
                 Toast.LENGTH_LONG
             ).show()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_actions, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_settings -> {
+            // Show the settings UI
+            true
+        }
+
+        R.id.action_favorite -> {
+            // Mark the current item as favorite
+            true
+        }
+
+        else -> {
+            super.onOptionsItemSelected(item)
         }
     }
 }
